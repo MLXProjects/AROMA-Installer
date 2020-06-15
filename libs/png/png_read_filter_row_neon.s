@@ -1,46 +1,46 @@
-#; Copyright (c) 2010, Code Aurora Forum. All rights reserved.
-#;
-#; Redistribution and use in source and binary forms, with or without
-#; modification, are permitted provided that the following conditions are
-#; met:
-#;     * Redistributions of source code must retain the above copyright
-#;       notice, this list of conditions and the following disclaimer.
-#;     * Redistributions in binary form must reproduce the above
-#;       copyright notice, this list of conditions and the following
-#;       disclaimer in the documentation and/or other materials provided
-#;       with the distribution.
-#;     * Neither the name of Code Aurora Forum, Inc. nor the names of its
-#;       contributors may be used to endorse or promote products derived
-#;       from this software without specific prior written permission.
-#;
-#; THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-#; WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-#; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-#; ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-#; BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-#; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-#; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-#; BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-#; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-#; OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-#; IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@; Copyright (c) 2010, Code Aurora Forum. All rights reserved.
+@;
+@; Redistribution and use in source and binary forms, with or without
+@; modification, are permitted provided that the following conditions are
+@; met:
+@;     * Redistributions of source code must retain the above copyright
+@;       notice, this list of conditions and the following disclaimer.
+@;     * Redistributions in binary form must reproduce the above
+@;       copyright notice, this list of conditions and the following
+@;       disclaimer in the documentation and/or other materials provided
+@;       with the distribution.
+@;     * Neither the name of Code Aurora Forum, Inc. nor the names of its
+@;       contributors may be used to endorse or promote products derived
+@;       from this software without specific prior written permission.
+@;
+@; THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+@; WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+@; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+@; ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+@; BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+@; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+@; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+@; BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+@; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+@; OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+@; IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#;==============================================================================
+@;==============================================================================
 
         .code 32                                          @; Code is ARM ISA
-#;==============================================================================
+@;==============================================================================
 
         .global     png_read_filter_row_neon
 
-#;==============================================================================
-#;       INPUTS:    r0       rowbytes:     number of bytes in current row
-#;                  r1       pixel_depth:  number of bits per pixel
-#;                  r2       row:          pointer to start of current row
-#;                  r3       prev_row:     pointer to start of previous row
-#;                  [sp,#0]  filter:       filter type
-#;
-#;       NOTE:      Don't touch r5-r11
-#;==============================================================================
+@;==============================================================================
+@;       INPUTS:    r0       rowbytes:     number of bytes in current row
+@;                  r1       pixel_depth:  number of bits per pixel
+@;                  r2       row:          pointer to start of current row
+@;                  r3       prev_row:     pointer to start of previous row
+@;                  [sp,#0]  filter:       filter type
+@;
+@;       NOTE:      Don't touch r5-r11
+@;==============================================================================
 .balign 32
 .type png_read_filter_row_neon, %function
 png_read_filter_row_neon:
@@ -64,9 +64,9 @@ png_read_filter_row_neon:
 
         b          DONE
 
-        #;; ---------------
-        #;; SUB filter type
-        #;; ---------------
+        @;; ---------------
+        @;; SUB filter type
+        @;; ---------------
 
 
 sub_filter:
@@ -77,10 +77,10 @@ sub_filter:
         lsr        r1,r1,#3                @;     = (pixel_depth + 7) >> 3
         mov        r12,r1
 
-        #;; r0 = rowbytes
-        #;; r1 = loop counter = bpp (initially)
-        #;; r2 = row pointer
-        #;; r12 = bpp = loop/pointer increment value
+        @;; r0 = rowbytes
+        @;; r1 = loop counter = bpp (initially)
+        @;; r2 = row pointer
+        @;; r12 = bpp = loop/pointer increment value
 
         cmp        r1,r0
         beq        sub_filter_exit         @; exit if bpp == rowbytes
@@ -109,9 +109,9 @@ sub_filter_exit:
 
 sub_filter_1bpp:
 
-        #;; ----------------------------
-        #;; SUB filter, 1 byte per pixel
-        #;; ----------------------------
+        @;; ----------------------------
+        @;; SUB filter, 1 byte per pixel
+        @;; ----------------------------
 
       lsrs       r4,r0,#4                      @; r1 = floor(rowbytes/4)
                                                @;    = iteration count for loop16
@@ -218,9 +218,9 @@ sub_filter_1bpp_loop:
 
        b          sub_filter_DONE               @; return
 
-       #;; -----------------------------
-       #;; SUB filter, 2 bytes per pixel
-       #;; -----------------------------
+       @;; -----------------------------
+       @;; SUB filter, 2 bytes per pixel
+       @;; -----------------------------
 sub_filter_2bpp:
 
        lsrs       r4,r0,#4                      @; r1 = floor(rowbytes/4)
@@ -300,9 +300,9 @@ sub_filter_2bpp_loop:
                                                 @
        b          sub_filter_DONE               @ ; return
 
-       #;; -----------------------------
-       #;; SUB filter, 3 bytes per pixel
-       #;; -----------------------------
+       @;; -----------------------------
+       @;; SUB filter, 3 bytes per pixel
+       @;; -----------------------------
 sub_filter_3bpp:
        vld1.32    {d0[0]},[r2], r12             @; load 4 bytes (1 pixel + 1 extra byte) into D0[0]
                                                 @; increment row pointer by bpp
@@ -324,9 +324,9 @@ sub_filter_3bpp_loop:
 
        b          sub_filter_DONE               @; return
 
-       #;; -----------------------------
-       #;; SUB filter, 4 bytes per pixel
-       #;; -----------------------------
+       @;; -----------------------------
+       @;; SUB filter, 4 bytes per pixel
+       @;; -----------------------------
 sub_filter_4bpp:
        vld1.32    {d0[0]},[r2]!                 @; load 4 bytes (1 pixel) into D0[0]
                                                 @; increment row pointer
@@ -346,9 +346,9 @@ sub_filter_4bpp_loop:                           @
 
        b          sub_filter_DONE               @; return
 
-       #;; -----------------------------
-       #;; SUB filter, 6 bytes per pixel
-       #;; -----------------------------
+       @;; -----------------------------
+       @;; SUB filter, 6 bytes per pixel
+       @;; -----------------------------
 sub_filter_6bpp:
        vld1.8     {d0},[r2],r12                @; load 8 bytes (1 pixel + 2 extra bytes) into D0
                                                @; increment row pointer by bpp
@@ -370,9 +370,9 @@ sub_filter_6bpp_loop:                          @
 
        b          sub_filter_DONE              @; return
 
-       #;; -----------------------------
-       #;; SUB filter, 8 bytes per pixel
-       #;; -----------------------------
+       @;; -----------------------------
+       @;; SUB filter, 8 bytes per pixel
+       @;; -----------------------------
 sub_filter_8bpp:
        vld1.8     {d0},[r2]!                   @; load 8 bytes (1 pixel) into D0
                                                @; increment row pointer
@@ -396,15 +396,15 @@ sub_filter_DONE:
        ldmia       sp!, {r4}
        bx         r14
 
-       #;; --------------
-       #;; UP filter type
-       #;; --------------
+       @;; --------------
+       @;; UP filter type
+       @;; --------------
 up_filter:
 
-       #;; r0 = rowbytes
-       #;; r1 = pixel_depth (not required for UP filter type)
-       #;; r2 = row pointer
-       #;; r3 = previous row pointer
+       @;; r0 = rowbytes
+       @;; r1 = pixel_depth (not required for UP filter type)
+       @;; r2 = row pointer
+       @;; r3 = previous row pointer
 
 
        lsrs       r1,r0,#5                     @; r1 = floor(rowbytes/32)
@@ -520,20 +520,20 @@ up_filter_1byte_proc_done:
 
        b          DONE
 
-       #;; ---------------
-       #;; AVG filter type
-       #;; ---------------
+       @;; ---------------
+       @;; AVG filter type
+       @;; ---------------
 avg_filter:
 
       add        r1,r1,#7                      @; bpp = byptes per pixel
       lsr        r1,r1,#3                      @;     = (pixel_depth + 7) >> 3
       mov        r12,r1
 
-      #;; r0 = rowbytes
-      #;; r1 = loop counter = bpp (initially)
-      #;; r2 = row pointer
-      #;; r3 = previous row pointer
-      #;; r12 = bpp = loop/pointer increment value
+      @;; r0 = rowbytes
+      @;; r1 = loop counter = bpp (initially)
+      @;; r2 = row pointer
+      @;; r3 = previous row pointer
+      @;; r12 = bpp = loop/pointer increment value
 
       cmp        r12,#1
       beq        avg_filter_1bpp
@@ -556,9 +556,9 @@ avg_filter:
 avg_filter_exit:
       b          DONE                           @; return
 
-      #;; ----------------------------
-      #;; AVG filter, 1 byte per pixel
-      #;; ----------------------------
+      @;; ----------------------------
+      @;; AVG filter, 1 byte per pixel
+      @;; ----------------------------
 avg_filter_1bpp:
 
       cmp        r1,r0
@@ -593,9 +593,9 @@ avg_filter_1bpp_loop:
 
       b          DONE                           @; exit loop when
                                                 @;  loop counter  == rowbytes
-      #;; -----------------------------
-      #;; AVG filter, 2 bytes per pixel
-      #;; -----------------------------
+      @;; -----------------------------
+      @;; AVG filter, 2 bytes per pixel
+      @;; -----------------------------
 avg_filter_2bpp:
 
       cmp        r1,r0
@@ -632,9 +632,9 @@ avg_filter_2bpp_loop:
       b          DONE                           @; exit loop when
                                                 @;  loop counter  == rowbytes
 
-      #;; -----------------------------
-      #;; AVG filter, 3 bytes per pixel
-      #;; -----------------------------
+      @;; -----------------------------
+      @;; AVG filter, 3 bytes per pixel
+      @;; -----------------------------
 avg_filter_3bpp:
 
       cmp        r1,r0
@@ -673,9 +673,9 @@ avg_filter_3bpp_loop:
 
       b          DONE                           @; exit loop when
                                                 @;  loop counter  == rowbytes
-      #;; -----------------------------
-      #;; AVG filter, 4 bytes per pixel
-      #;; -----------------------------
+      @;; -----------------------------
+      @;; AVG filter, 4 bytes per pixel
+      @;; -----------------------------
 avg_filter_4bpp:
 
       cmp        r1,r0
@@ -710,9 +710,9 @@ avg_filter_4bpp_loop:
 
       b          DONE                           @; exit loop when
                                                 @;  loop counter  == rowbytes
-      #;; -----------------------------
-      #;; AVG filter, 6 bytes per pixel
-      #;; -----------------------------
+      @;; -----------------------------
+      @;; AVG filter, 6 bytes per pixel
+      @;; -----------------------------
 avg_filter_6bpp:
 
       cmp        r1,r0
@@ -752,9 +752,9 @@ avg_filter_6bpp_loop:
 
       b          DONE                           @; exit loop when
                                                 @;  loop counter  == rowbytes
-      #;; -----------------------------
-      #;; AVG filter, 8 bytes per pixel
-      #;; -----------------------------
+      @;; -----------------------------
+      @;; AVG filter, 8 bytes per pixel
+      @;; -----------------------------
 avg_filter_8bpp:
 
       cmp        r1,r0
@@ -788,9 +788,9 @@ avg_filter_8bpp_loop:
 
       b          DONE                           @; exit loop when
                                                 @;  loop counter  == rowbytes
-      #;; -----------------
-      #;; PAETH filter type
-      #;; -----------------
+      @;; -----------------
+      @;; PAETH filter type
+      @;; -----------------
 paeth_filter:
 
       VPUSH     {q4-q7}
@@ -798,11 +798,11 @@ paeth_filter:
       lsr        r1,r1,#3                       @;     = (pixel_depth + 7) >> 3
       mov        r12,r1
 
-      #;; r0 = rowbytes
-      #;; r1 = loop counter = bpp (initially)
-      #;; r2 = row pointer
-      #;; r3 = previous row pointer
-      #;; r12 = bpp = loop/pointer increment value
+      @;; r0 = rowbytes
+      @;; r1 = loop counter = bpp (initially)
+      @;; r2 = row pointer
+      @;; r3 = previous row pointer
+      @;; r12 = bpp = loop/pointer increment value
 
 
       cmp        r12,#1
@@ -826,9 +826,9 @@ paeth_filter:
 paeth_filter_exit:
       b          paeth_filter_DONE              @; return
 
-      #;; ------------------------------
-      #;; PAETH filter, 1 byte per pixel
-      #;; ------------------------------
+      @;; ------------------------------
+      @;; PAETH filter, 1 byte per pixel
+      @;; ------------------------------
 paeth_filter_1bpp:
 
       cmp        r1, r0
@@ -849,8 +849,8 @@ paeth_filter_1bpp_loop:
       cmp        r1,r0
 
 
-      #;; d1[0] = c (b in the previous loop iteration)
-      #;; d2[0] = a (x in the previous loop iteration)
+      @;; d1[0] = c (b in the previous loop iteration)
+      @;; d2[0] = a (x in the previous loop iteration)
       vld1.8     {d3[0]},[r3]!                  @; load 1 byte (pixel b) from prev
                                                 @;  row into d3[0]
       vld1.8     {d0[0]},[r2]                   @; load 1 byte (pixel x) from curr
@@ -882,9 +882,9 @@ paeth_filter_1bpp_loop:
 
       b          paeth_filter_DONE              @; exit loop when
                                                 @;  loop counter == rowbytes
-      #;; -------------------------------
-      #;; PAETH filter, 2 bytes per pixel
-      #;; -------------------------------
+      @;; -------------------------------
+      @;; PAETH filter, 2 bytes per pixel
+      @;; -------------------------------
 paeth_filter_2bpp:
 
       cmp        r1, r0
@@ -903,8 +903,8 @@ paeth_filter_2bpp_loop:
       add        r1,r1,r12                      @; loop counter += bpp
       cmp        r1,r0
 
-      #;; d1[0] = c (b in the previous loop iteration)
-      #;; d2[0] = a (x in the previous loop iteration)
+      @;; d1[0] = c (b in the previous loop iteration)
+      @;; d2[0] = a (x in the previous loop iteration)
       vld1.16    {d3[0]},[r3]!                  @; load 2 bytes (pixel b) from prev
                                                 @;  row into d3[0]
       vld1.16    {d0[0]},[r2]                   @; load 2 bytes (pixel x) from curr
@@ -935,9 +935,9 @@ paeth_filter_2bpp_loop:
 
       b          paeth_filter_DONE              @; exit loop when
                                                 @;  loop counter == rowbytes
-      #;; -------------------------------
-      #;; PAETH filter, 3 bytes per pixel
-      #;; -------------------------------
+      @;; -------------------------------
+      @;; PAETH filter, 3 bytes per pixel
+      @;; -------------------------------
 paeth_filter_3bpp:
 
       cmp        r1, r0
@@ -959,8 +959,8 @@ paeth_filter_3bpp_loop:
       cmp        r1,r0
 
 
-      #;; d1[0] = c (b in the previous loop iteration)
-      #;; d2[0] = a (x in the previous loop iteration)
+      @;; d1[0] = c (b in the previous loop iteration)
+      @;; d2[0] = a (x in the previous loop iteration)
       vld1.32    {d3[0]},[r3],r12               @; load 4 bytes (pixel b + 1 extra
                                                 @;  byte) from prev row into d3[0]
       vld1.32    {d0[0]},[r2]                   @; load 4 bytes (pixel x + 1 extra
@@ -993,9 +993,9 @@ paeth_filter_3bpp_loop:
 
       b          paeth_filter_DONE              @; exit loop when
                                                 @;  loop counter == rowbytes
-      #;; -------------------------------
-      #;; PAETH filter, 4 bytes per pixel
-      #;; -------------------------------
+      @;; -------------------------------
+      @;; PAETH filter, 4 bytes per pixel
+      @;; -------------------------------
 paeth_filter_4bpp:
 
      cmp        r1, r0
@@ -1015,8 +1015,8 @@ paeth_filter_4bpp_loop:
      cmp        r1,r0
 
 
-     #;; d1[0] = c (b in the previous loop iteration)
-     #;; d2[0] = a (x in the previous loop iteration)
+     @;; d1[0] = c (b in the previous loop iteration)
+     @;; d2[0] = a (x in the previous loop iteration)
      vld1.32    {d3[0]},[r3]!                   @; load 4 bytes (pixel b) from prev
                                                 @;  row into d3[0]
      vld1.32    {d0[0]},[r2]                    @; load 4 bytes (pixel x) from curr
@@ -1047,9 +1047,9 @@ paeth_filter_4bpp_loop:
 
      b          paeth_filter_DONE              @; exit loop when
                                                @;  loop counter == rowbytes
-     #;; -------------------------------
-     #;; PAETH filter, 6 bytes per pixel
-     #;; -------------------------------
+     @;; -------------------------------
+     @;; PAETH filter, 6 bytes per pixel
+     @;; -------------------------------
 paeth_filter_6bpp:
      cmp        r1, r0
 
@@ -1070,8 +1070,8 @@ paeth_filter_6bpp_loop:
      cmp        r1,r0
 
 
-     #;; d1[0] = c (b in the previous loop iteration)
-     #;; d2[0] = a (x in the previous loop iteration)
+     @;; d1[0] = c (b in the previous loop iteration)
+     @;; d2[0] = a (x in the previous loop iteration)
      vld1.8     {d3},[r3],r12                   @; load 8 bytes (pixel b + 2 extra
                                                 @;  bytes) from prev row into d3
      vld1.8     {d0},[r2]                       @; load 8 bytes (pixel x + 2 extra
@@ -1104,9 +1104,9 @@ paeth_filter_6bpp_loop:
 
      b          paeth_filter_DONE              @; exit loop when
                                                @;  loop counter == rowbytes
-     #;; -------------------------------
-     #;; PAETH filter, 8 bytes per pixel
-     #;; -------------------------------
+     @;; -------------------------------
+     @;; PAETH filter, 8 bytes per pixel
+     @;; -------------------------------
 paeth_filter_8bpp:
     cmp        r1, r0
 
@@ -1125,8 +1125,8 @@ paeth_filter_8bpp_loop:
     cmp        r1,r0
 
 
-    #;; d1[0] = c (b in the previous loop iteration)
-    #;; d2[0] = a (x in the previous loop iteration)
+    @;; d1[0] = c (b in the previous loop iteration)
+    @;; d2[0] = a (x in the previous loop iteration)
     vld1.8     {d3},[r3]!                       @; load 8 bytes (pixel b) from prev
                                                 @;  row into d3
     vld1.8     {d0},[r2]                        @; load 8 bytes (pixel x) from curr
@@ -1167,4 +1167,3 @@ DONE:
 
 
 .size png_read_filter_row_neon, .-png_read_filter_row_neon
-     .END

@@ -97,16 +97,12 @@ void mzHashTableFree(HashTable* pHashTable);
 /*
  * Get #of entries in hash table.
  */
-INLINE int mzHashTableNumEntries(HashTable* pHashTable) {
-    return pHashTable->numEntries;
-}
+extern int mzHashTableNumEntries(HashTable* pHashTable);
 
 /*
  * Get total size of hash table (for memory usage calculations).
  */
-INLINE int mzHashTableMemUsage(HashTable* pHashTable) {
-    return sizeof(HashTable) + pHashTable->tableSize * sizeof(HashEntry);
-}
+extern int mzHashTableMemUsage(HashTable* pHashTable);
 
 /*
  * Look up an entry in the table, possibly adding it if it's not there.
@@ -149,28 +145,13 @@ typedef struct HashIter {
     HashTable*  pHashTable;
     int         idx;
 } HashIter;
-INLINE void mzHashIterNext(HashIter* pIter) {
-    int i = pIter->idx +1;
-    int lim = pIter->pHashTable->tableSize;
-    for ( ; i < lim; i++) {
-        void* data = pIter->pHashTable->pEntries[i].data;
-        if (data != NULL && data != HASH_TOMBSTONE)
-            break;
-    }
-    pIter->idx = i;
-}
-INLINE void mzHashIterBegin(HashTable* pHashTable, HashIter* pIter) {
-    pIter->pHashTable = pHashTable;
-    pIter->idx = -1;
-    mzHashIterNext(pIter);
-}
-INLINE bool mzHashIterDone(HashIter* pIter) {
-    return (pIter->idx >= pIter->pHashTable->tableSize);
-}
-INLINE void* mzHashIterData(HashIter* pIter) {
-    assert(pIter->idx >= 0 && pIter->idx < pIter->pHashTable->tableSize);
-    return pIter->pHashTable->pEntries[pIter->idx].data;
-}
+
+extern void mzHashIterNext(HashIter* pIter);
+
+extern void mzHashIterBegin(HashTable* pHashTable, HashIter* pIter) ;
+
+extern bool mzHashIterDone(HashIter* pIter);
+extern void* mzHashIterData(HashIter* pIter);
 
 
 /*

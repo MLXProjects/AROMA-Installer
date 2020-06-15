@@ -366,6 +366,9 @@ int atouch_wait_ex(ATEV * atev, byte calibratingtouch) {
     else if ((key != 0) && (key == acfg()->ckey_select)) {
       return ATEV_SELECT;
     }
+    else if ((key != 0) && (key == acfg()->ckey_power)) {
+      return ATEV_POWER;
+    }
     else if ((key != 0) && (key == acfg()->ckey_back)) {
       return ATEV_BACK;
     }
@@ -413,7 +416,6 @@ int atouch_wait_ex(ATEV * atev, byte calibratingtouch) {
           
           /* SELECT */
         case KEY_LEFTBRACE:
-        case KEY_POWER:
         case KEY_HOME:
         case BTN_MOUSE:
         case KEY_ENTER:
@@ -451,6 +453,10 @@ int atouch_wait_ex(ATEV * atev, byte calibratingtouch) {
         case KEY_BACKSPACE:
         case KEY_BACK:
           return ATEV_BACK;
+          break;
+          /* POWER */
+        case KEY_POWER:
+          return ATEV_POWER;
           break;
       }
     }

@@ -1380,6 +1380,9 @@ Value * AROMA_INI_GET(const char * name, State * state, int argc, Expr * argv[])
   else if (strcmp(args[0], "customkeycode_select") == 0) {
     snprintf(retval, 128, "%i", acfg()->ckey_select);
   }
+  else if (strcmp(args[0], "customkeycode_power") == 0) {
+    snprintf(retval, 128, "%i", acfg()->ckey_power);
+  }
   else if (strcmp(args[0], "customkeycode_back") == 0) {
     snprintf(retval, 128, "%i", acfg()->ckey_back);
   }
@@ -1501,6 +1504,9 @@ Value * AROMA_INI_SET(const char * name, State * state, int argc, Expr * argv[])
   else if (strcmp(args[0], "customkeycode_select") == 0) {
     acfg()->ckey_select = valkey;
   }
+  else if (strcmp(args[0], "customkeycode_power") == 0) {
+    acfg()->ckey_power = valkey;
+  }
   else if (strcmp(args[0], "customkeycode_back") == 0) {
     acfg()->ckey_back = valkey;
   }
@@ -1570,7 +1576,7 @@ Value * AROMA_ANISPLASH(const char * name, State * state, int argc, Expr * argv[
   //-- Create Splash BG
   CANVAS splashbg;
   ag_canvas(&splashbg, agw(), agh());
-  ag_blur(&splashbg, agc(), agdp() * 2);
+  //ag_blur(&splashbg, agc(), agdp() * 2);  BLUR STARTUP DISABLED
   PNGCANVAS * ap = malloc(sizeof(PNGCANVAS) * frame_n);
   int    *    ad = malloc(sizeof(int) * frame_n);
   byte    *   au = malloc(sizeof(byte) * frame_n);
@@ -1665,7 +1671,7 @@ Value * AROMA_SPLASH(const char * name, State * state, int argc, Expr * argv[]) 
   //-- Create Splash BG
   CANVAS splashbg;
   ag_canvas(&splashbg, agw(), agh());
-  ag_blur(&splashbg, agc(), agdp() * 2);
+  // ag_blur(&splashbg, agc(), agdp() * 2); BLUR DISABLED AGAIN
   //-- Load PNG
   PNGCANVAS ap;
   
@@ -3350,7 +3356,7 @@ Value * AROMA_EXEC(const char * name, State * state, int argc, Expr * argv[]) {
   }
   
   //-- Set Busy before everythings ready
-  ag_setbusy();
+  //ag_setbusy();
   int exec_status = -1;
   char status_str[16];
   snprintf(status_str, 16, "-1");
@@ -3442,9 +3448,27 @@ Value * AROMA_EXEC(const char * name, State * state, int argc, Expr * argv[]) {
 done:
   //-- Return
   return StringValue(strdup(status_str));
+}/*
+
+Value * EXEC_NOWAIT(const char * name, State * state, int argc, Expr * argv[]) {
+
+  int i         = 0;
+  char ** args2  = malloc(sizeof(char *) * (argc + 1));
+  args2[0]      = path;
+  
+  for (i = 1; i < argc; i++) {
+    args2[i] = args[i];
+  }
+  
+  args2[argc]   = NULL;
+  if (args2[0] == ""){
+    goto done;
+  }
+  system(args2[0]);
+  done:
+  return StringValue(strdup(""));
 }
-
-
+*/
 //*
 //* loadlang
 //*
@@ -3694,7 +3718,8 @@ void RegisterAroma() {
   RegisterFunction("zipexec",       AROMA_EXEC);          //-- Exec Program From Zip
   RegisterFunction("resexec",       AROMA_EXEC);          //-- Exec Program From Resource
   RegisterFunction("run_program",   AROMA_EXEC);          //-- Run Program/Exec
-  RegisterFunction("exec",          AROMA_EXEC);          //-- Run Prohram/Exec
+  RegisterFunction("exec",          AROMA_EXEC);          //-- Run Program/Exec
+  // RegisterFunction("execnowait",    EXEC_NOWAIT);         //-- Run Program/Exec (no wait edition!)
   //-- MAIN UI FUNCTIONS (With Next & Back Buttons)
   RegisterFunction("anisplash",     AROMA_ANISPLASH);     //-- SPLASH SCREEN
   RegisterFunction("splash",        AROMA_SPLASH);        //-- SPLASH SCREEN

@@ -22,7 +22,7 @@ typedef struct MemMapping {
 } MemMapping;
 
 /* copy a map */
-INLINE void sysCopyMap(MemMapping* dst, const MemMapping* src) {
+static inline void sysCopyMap(MemMapping* dst, const MemMapping* src) {
     *dst = *src;
 }
 

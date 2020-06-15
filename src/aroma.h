@@ -292,6 +292,7 @@ byte file_exists(const char * file);
 #define ATEV_MOUSEUP  10
 #define ATEV_MOUSEMV  11
 #define ATEV_SEARCH   12
+#define ATEV_POWER	  7303
 #define ATEV_MESSAGE  30
 #define KEY_CENTER    232
 
@@ -389,6 +390,7 @@ typedef struct  {
   int ckey_up;
   int ckey_down;
   int ckey_select;
+  int ckey_power;
   int ckey_back;
   int ckey_menu;
   

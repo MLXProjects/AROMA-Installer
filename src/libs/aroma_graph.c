@@ -26,6 +26,7 @@
 #include <linux/fb.h>
 #include <sys/mman.h>
 #include <pthread.h>
+#include <unistd.h> // for usleep
 #include "../aroma.h"
 
 /*****************************[ GLOBAL VARIABLES ]*****************************/
@@ -739,6 +740,7 @@ static void * ag_thread(void * cookie) {
 
 //-- Sync Display
 void ag_copybusy(char * wait) {
+  
   CANVAS tmpc;
   ag_canvas(&tmpc, agw(), agh());
   ag_draw(&tmpc, &ag_c, 0, 0);

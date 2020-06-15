@@ -1,44 +1,44 @@
-#; Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-#;
-#; Redistribution and use in source and binary forms, with or without
-#; modification, are permitted provided that the following conditions are
-#; met:
-#;     * Redistributions of source code must retain the above copyright
-#;       notice, this list of conditions and the following disclaimer.
-#;     * Redistributions in binary form must reproduce the above
-#;       copyright notice, this list of conditions and the following
-#;       disclaimer in the documentation and/or other materials provided
-#;       with the distribution.
-#;     * Neither the name of Code Aurora Forum, Inc. nor the names of its
-#;       contributors may be used to endorse or promote products derived
-#;       from this software without specific prior written permission.
-#;
-#; THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-#; WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-#; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-#; ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-#; BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-#; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-#; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-#; BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-#; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-#; OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-#; IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@: Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+@:
+@: Redistribution and use in source and binary forms, with or without
+@: modification, are permitted provided that the following conditions are
+@: met:
+@:     * Redistributions of source code must retain the above copyright
+@:       notice, this list of conditions and the following disclaimer.
+@:     * Redistributions in binary form must reproduce the above
+@:       copyright notice, this list of conditions and the following
+@:       disclaimer in the documentation and/or other materials provided
+@:       with the distribution.
+@:     * Neither the name of Code Aurora Forum, Inc. nor the names of its
+@:       contributors may be used to endorse or promote products derived
+@:       from this software without specific prior written permission.
+@:
+@: THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+@: WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+@: MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+@: ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+@: BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+@: CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+@: SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+@: BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+@: WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+@: OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+@: IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#;============================================================================
-#;  Code Section
+@:============================================================================
+@:  Code Section
         .code 32                                         @; Code is ARM ISA
-#;============================================================================
+@:============================================================================
 
         .global     inflate_fast_copy_neon
 
 
-#;============================================================================
-#;       INPUTS:    r0       len:     number of bytes to transfer
-#;                  r1       **out:   pointer to pointer to ``out'' buffer
-#;                  r2       *from:   pointer to ``from'' buffer
-#;       OUTPUTS:   r1       **out:   pointer to pointer to ``out'' buffer
-#;============================================================================
+@:============================================================================
+@:       INPUTS:    r0       len:     number of bytes to transfer
+@:                  r1       **out:   pointer to pointer to ``out'' buffer
+@:                  r2       *from:   pointer to ``from'' buffer
+@:       OUTPUTS:   r1       **out:   pointer to pointer to ``out'' buffer
+@:============================================================================
 .balign 32
 .type inflate_fast_copy_neon, %function
 inflate_fast_copy_neon:
@@ -47,8 +47,8 @@ inflate_fast_copy_neon:
        cmp        r0,#16               @;
        bge        inflate_fast_copy_vectorized
 
-       #;; transfer bytes one by one
-       #;; only if len < 16 bytes
+       @:; transfer bytes one by one
+       @:; only if len < 16 bytes
 inflate_fast_copy_default:
 
        cmp        r0,#0
@@ -68,8 +68,8 @@ inflate_fast_copy_default_loop:
                                        @;      to out
        b          inflate_fast_copy_exit
 
-       #;; vectorized copy routines
-       #;; only if len > 16 bytes
+       @:; vectorized copy routines
+       @:; only if len > 16 bytes
 inflate_fast_copy_vectorized:
 
       ldr        r3,[r1,#0]            @; r3 = pointer to out
@@ -103,16 +103,16 @@ inflate_fast_copy_vectorized:
       bhs        inflate_fast_copy_gap16b_proc
 
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is 1 byte
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is 1 byte
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap1b_proc:
 
       add        r3,r3,#1                  @; out++
@@ -151,16 +151,16 @@ inflate_fast_copy_gap1b_proc_lastfewbytes_loop:
                                            @;      to out
       b          inflate_fast_copy_exit
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is 2 bytes
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is 2 bytes
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap2b_proc:
 
       add        r2,r2,#1                @; from++
@@ -203,17 +203,17 @@ inflate_fast_copy_gap2b_proc_lastfewbytes_loop:
                                          @;      to out
       b          inflate_fast_copy_exit
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is 3 bytes
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;;  r4 = 3
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is 3 bytes
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:;  r4 = 3
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap3b_proc:
 
       add        r2,r2,#1                @; from++
@@ -253,16 +253,16 @@ inflate_fast_copy_gap3b_proc_lastfewbytes_loop:
                                          @;      to out
       b          inflate_fast_copy_exit
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is 4 bytes
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is 4 bytes
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap4b_proc:
 
       add        r2,r2,#1               @; from++
@@ -305,17 +305,17 @@ inflate_fast_copy_gap4b_proc_lastfewbytes_loop:
                                         @;      to out
       b          inflate_fast_copy_exit
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is {5-7} bytes
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;;  r4 = {5-7}
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is {5-7} bytes
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:;  r4 = {5-7}
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap5to7b_proc:
 
       add        r2,r2,#1                @; from++
@@ -355,16 +355,16 @@ inflate_fast_copy_gap5to7b_proc_lastfewbytes_loop:
                                          @;      to out
       b          inflate_fast_copy_exit
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is 8 bytes
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is 8 bytes
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap8b_proc:
 
       add        r2,r2,#1              @; from++
@@ -407,17 +407,17 @@ inflate_fast_copy_gap8b_proc_lastfewbytes_loop:
                                       @;      to out
       b          inflate_fast_copy_exit
 
-      #;; ------------------------------------------------------------------
-      #;; vectorized copy routine when gap between ``from'' and ``out''
-      #;;  buffers is {9-15} bytes
-      #;; INPUTS:
-      #;;  r0 = len
-      #;;  r2 = pointer to from
-      #;;  r3 = pointer to out
-      #;;  r4 = {9-15}
-      #;; OUTPUTS:
-      #;;  r1 = pointer to pointer to out
-      #;; ------------------------------------------------------------------
+      @:; ------------------------------------------------------------------
+      @:; vectorized copy routine when gap between ``from'' and ``out''
+      @:;  buffers is {9-15} bytes
+      @:; INPUTS:
+      @:;  r0 = len
+      @:;  r2 = pointer to from
+      @:;  r3 = pointer to out
+      @:;  r4 = {9-15}
+      @:; OUTPUTS:
+      @:;  r1 = pointer to pointer to out
+      @:; ------------------------------------------------------------------
 inflate_fast_copy_gap9to15b_proc:
 
       add        r2,r2,#1            @; from++
@@ -457,16 +457,16 @@ inflate_fast_copy_gap9to15b_proc_lastfewbytes_loop:
                                      @;      to out
      b          inflate_fast_copy_exit
 
-     #;; ------------------------------------------------------------------
-     #;; vectorized copy routine when gap between ``from'' and ``out''
-     #;;  buffers is 16 bytes or more
-     #;; INPUTS:
-     #;;  r0 = len
-     #;;  r2 = pointer to from
-     #;;  r3 = pointer to out
-     #;; OUTPUTS:
-     #;;  r1 = pointer to pointer to out
-     #;; ------------------------------------------------------------------
+     @:; ------------------------------------------------------------------
+     @:; vectorized copy routine when gap between ``from'' and ``out''
+     @:;  buffers is 16 bytes or more
+     @:; INPUTS:
+     @:;  r0 = len
+     @:;  r2 = pointer to from
+     @:;  r3 = pointer to out
+     @:; OUTPUTS:
+     @:;  r1 = pointer to pointer to out
+     @:; ------------------------------------------------------------------
 inflate_fast_copy_gap16b_proc:
 
      add        r2,r2,#1             @; from++
@@ -512,6 +512,3 @@ inflate_fast_copy_exit:
       bx         lr                  @; return
 
 .size inflate_fast_copy_neon,  .-inflate_fast_copy_neon
-
-
-        .END

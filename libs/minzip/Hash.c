@@ -20,6 +20,44 @@
 //#define LOAD_NUMER  1       // 50%
 //#define LOAD_DENOM  2
 
+/* definitions removed from hash.h */
+
+void mzHashIterBegin(HashTable* pHashTable, HashIter* pIter) {
+    pIter->pHashTable = pHashTable;
+    pIter->idx = -1;
+    mzHashIterNext(pIter);
+}
+
+bool mzHashIterDone(HashIter* pIter) {
+    return (pIter->idx >= pIter->pHashTable->tableSize);
+}
+
+void* mzHashIterData(HashIter* pIter) {
+    assert(pIter->idx >= 0 && pIter->idx < pIter->pHashTable->tableSize);
+    return pIter->pHashTable->pEntries[pIter->idx].data;
+}
+
+void mzHashIterNext(HashIter* pIter) {
+    int i = pIter->idx +1;
+    int lim = pIter->pHashTable->tableSize;
+    for ( ; i < lim; i++) {
+        void* data = pIter->pHashTable->pEntries[i].data;
+        if (data != NULL && data != HASH_TOMBSTONE)
+            break;
+    }
+    pIter->idx = i;
+}
+
+int mzHashTableNumEntries(HashTable* pHashTable) {
+    return pHashTable->numEntries;
+}
+
+int mzHashTableMemUsage(HashTable* pHashTable) {
+    return sizeof(HashTable) + pHashTable->tableSize * sizeof(HashEntry);
+}
+
+
+
 /*
  * Compute the capacity needed for a table to hold "size" elements.
  */

@@ -81,14 +81,14 @@ const ZipEntry* mzFindZipEntry(const ZipArchive* pArchive,
 /*
  * Get the number of entries in the Zip archive.
  */
-INLINE unsigned int mzZipEntryCount(const ZipArchive* pArchive) {
+static inline unsigned int mzZipEntryCount(const ZipArchive* pArchive) {
     return pArchive->numEntries;
 }
 
 /*
  * Get an entry by index.  Returns NULL if the index is out-of-bounds.
  */
-INLINE const ZipEntry*
+static inline const ZipEntry*
 mzGetZipEntryAt(const ZipArchive* pArchive, unsigned int index)
 {
     if (index < pArchive->numEntries) {
@@ -100,7 +100,7 @@ mzGetZipEntryAt(const ZipArchive* pArchive, unsigned int index)
 /*
  * Get the index number of an entry in the archive.
  */
-INLINE unsigned int
+static inline unsigned int
 mzGetZipEntryIndex(const ZipArchive *pArchive, const ZipEntry *pEntry) {
     return pEntry - pArchive->pEntries;
 }
@@ -108,22 +108,22 @@ mzGetZipEntryIndex(const ZipArchive *pArchive, const ZipEntry *pEntry) {
 /*
  * Simple accessors.
  */
-INLINE UnterminatedString mzGetZipEntryFileName(const ZipEntry* pEntry) {
+static inline UnterminatedString mzGetZipEntryFileName(const ZipEntry* pEntry) {
     UnterminatedString ret;
     ret.str = pEntry->fileName;
     ret.len = pEntry->fileNameLen;
     return ret;
 }
-INLINE long mzGetZipEntryOffset(const ZipEntry* pEntry) {
+static inline long mzGetZipEntryOffset(const ZipEntry* pEntry) {
     return pEntry->offset;
 }
-INLINE long mzGetZipEntryUncompLen(const ZipEntry* pEntry) {
+static inline long mzGetZipEntryUncompLen(const ZipEntry* pEntry) {
     return pEntry->uncompLen;
 }
-INLINE long mzGetZipEntryModTime(const ZipEntry* pEntry) {
+static inline long mzGetZipEntryModTime(const ZipEntry* pEntry) {
     return pEntry->modTime;
 }
-INLINE long mzGetZipEntryCrc32(const ZipEntry* pEntry) {
+static inline long mzGetZipEntryCrc32(const ZipEntry* pEntry) {
     return pEntry->crc32;
 }
 bool mzIsZipEntrySymlink(const ZipEntry* pEntry);

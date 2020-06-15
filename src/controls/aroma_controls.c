@@ -21,6 +21,7 @@
  *
  */
 #include <sched.h>
+#include <unistd.h> // for usleep
 #include "../aroma.h"
 
 /***************************[ GLOBAL VARIABLES ]**************************/
@@ -91,6 +92,7 @@ void acfg_init_ex(byte themeonly) {
     acfg_var.ckey_up      = 0;
     acfg_var.ckey_down    = 0;
     acfg_var.ckey_select  = 0;
+    acfg_var.ckey_power   = 0;
     acfg_var.ckey_back    = 0;
     acfg_var.ckey_menu    = 0;
   }
@@ -429,6 +431,8 @@ void aw_show_ex2(AWINDOWP win, byte anitype, int x, int pos, int w, int h, ACONT
       for (i = 1; i <= acfg()->fadeframes; i++) {
         ag_draw_ex(NULL, &win->c, 0, agh() - (anisz * i), 0, pos, agw(), drawh);
         ag_sync();
+        int milliseconds = 40;
+        usleep(milliseconds * 1000);
       }
       
       ag_draw(NULL, &win->c, 0, 0);
@@ -448,6 +452,8 @@ void aw_show_ex2(AWINDOWP win, byte anitype, int x, int pos, int w, int h, ACONT
         ag_draw_ex(NULL, &cbg, 0 - (anisz * i), pos, 0, pos, agw(), drawh);
         ag_draw_ex(NULL, &win->c, agw() - (anisz * i), pos, 0, pos, agw(), drawh);
         ag_sync();
+        int milliseconds = 40;
+        usleep(milliseconds * 1000);
       }
       
       ag_ccanvas(&cbg);
@@ -468,6 +474,8 @@ void aw_show_ex2(AWINDOWP win, byte anitype, int x, int pos, int w, int h, ACONT
         ag_draw_ex(NULL, &cbg, (anisz * i), pos, 0, pos, agw(), drawh);
         ag_draw_ex(NULL, &win->c, 0 - (agw() - (anisz * i)), pos, 0, pos, agw(), drawh);
         ag_sync();
+        int milliseconds = 40;
+        usleep(milliseconds * 1000);
       }
       
       ag_ccanvas(&cbg);
@@ -511,6 +519,8 @@ void aw_show_ex2(AWINDOWP win, byte anitype, int x, int pos, int w, int h, ACONT
         ag_draw(NULL, &tmpb[i], x, pos);
         ag_ccanvas(&tmpb[i]);
         ag_sync();
+        int milliseconds = 40;
+      	usleep(milliseconds * 1000);
       }
       
       free(tmpb);
@@ -553,6 +563,8 @@ void aw_show_ex2(AWINDOWP win, byte anitype, int x, int pos, int w, int h, ACONT
         ag_draw(NULL, &tmpb[i], x, pos);
         ag_ccanvas(&tmpb[i]);
         ag_sync();
+        int milliseconds = 40;
+        usleep(milliseconds * 1000);
       }
       
       free(tmpb);
@@ -595,6 +607,8 @@ void aw_show_ex2(AWINDOWP win, byte anitype, int x, int pos, int w, int h, ACONT
         ag_draw(NULL, &tmpb[i], x, pos);
         ag_ccanvas(&tmpb[i]);
         ag_sync();
+        int milliseconds = 40;
+        usleep(milliseconds * 1000);
       }
       
       free(tmpb);
@@ -984,6 +998,8 @@ void aw_unmaskparent(AWINDOWP win, CANVAS * p, CANVAS * maskc, int x, int y, int
         ag_draw(NULL, &tmpb[i], x, y);
         ag_ccanvas(&tmpb[i]);
         ag_sync();
+        int milliseconds = 40;
+        usleep(milliseconds * 1000);
       }
       
       free(tmpb);
@@ -1389,8 +1405,7 @@ byte aw_confirm(AWINDOWP parent, char * titlev, char * textv, char * img, char *
 }
 void aw_help_dialog(AWINDOWP parent) {
 }
-byte aw_calibdraw(CANVAS * c,
-                  int id, int * xpos, int * ypos, int * xtch, int * ytch) {
+byte aw_calibdraw(CANVAS * c, int id, int * xpos, int * ypos, int * xtch, int * ytch) {
   return 0;
   /*
   ag_draw(agc(), c, 0, 0);
